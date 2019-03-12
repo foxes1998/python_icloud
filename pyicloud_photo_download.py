@@ -95,6 +95,7 @@ if __name__ == '__main__':
     if daplication_select == 'y':
         # インスタンスに画像が保存されているパスを与える
         ins_check_daplication = CD.check_daplication(glasses_original_dir_pass)
+        daplication_pair = ins_check_daplication.find_daplication_with_Brute_force_search()
     else :
         pass
     

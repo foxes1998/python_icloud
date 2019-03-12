@@ -1,6 +1,10 @@
 import os
+import re
 import numpy as np
 import cv2 as cv
+
+from natsort import natsorted
+from multiprocessing import Pool
 
 class check_daplication:
     def __init__(self, image_dir_path):
@@ -9,11 +13,13 @@ class check_daplication:
     # 指定されたパスの中のファイル名リストを返す(ディレクトリが存在すれば警告をだす) 
     def get_file_list(self):
         file_name_list = []
-        for filename in os.listdir(image_dir_path):
-            if os.path.isfile(os.path.join(image_dir_path, filename)):
-                file.append(filename)
+        for filename in os.listdir(self.image_dir_path):
+            if re.match('\.', filename):
+                print('.hoge file exist')
+            elif os.path.isfile(os.path.join(self.image_dir_path, filename)):
+                file_name_list.append(filename)
             else :
-                print("Warning:There is a directory in"+ image_dir_path)
+                print("Warning:There is a directory in"+ self.image_dir_path)
 
         self.file_list = file_name_list
         return self.file_list
@@ -22,15 +28,23 @@ class check_daplication:
     def get_akaze_feature_value(self, image_file_path_1, image_file_path_2):
         self.image_file_path_1 = image_file_path_1
         self.image_file_path_2 = image_file_path_2
-        img1 = cv2.imread(self.image_file_path_1,0)
-        img2 = cv2.imread(self.image_file_path_2,0)
+        img1 = cv.imread(self.image_file_path_1,0)
+        img2 = cv.imread(self.image_file_path_2,0)
+        #速度向上のためのリサイズ
+        resize_width = 300
+        img_height_1, img_width_1 = img1.shape[:2]
+        img_height_2, img_width_2 = img2.shape[:2]
+        resize_height1 = resize_width / img_width_1 * img_height_1
+        resize_height2 = resize_width / img_width_2 * img_height_2
+        img1 = cv.resize(img1,(int(resize_width),int(resize_height1)))
+        img2 = cv.resize(img2,(int(resize_width),int(resize_height2)))
         #特徴抽出機の生成
-        detector = cv2.AKAZE_create()
+        detector = cv.AKAZE_create()
         #kpは特徴的な点の位置 destは特徴を現すベクトル
         kp1, des1 = detector.detectAndCompute(img1, None)
         kp2, des2 = detector.detectAndCompute(img2, None)
         #特徴点の比較機
-        bf = cv2.BFMatcher()
+        bf = cv.BFMatcher()
         matches = bf.knnMatch(des1,des2, k=2)
         #割合試験を適用
         good = []
@@ -39,3 +53,21 @@ class check_daplication:
             if m.distance < match_param*n.distance:
                 good.append([m])
         return len(good)
+
+    # 全画像を総当たりでakaze特徴を求めて重複していると思われる画像のファイル名の組みを返す
+    def find_daplication_with_Brute_force_search(self):
+        daplication_pair = []
+        all_file_list = natsorted(check_daplication.get_file_list(self))
+        for i in all_file_list:
+            for j in all_file_list:
+                if i == j or all_file_list.index(i) > all_file_list.index(j):
+                    pass
+                else:
+                    akaze_match_num = check_daplication.get_akaze_feature_value(self, self.image_dir_path + i, self.image_dir_path + j)
+                    print(self.image_dir_path + i +", "+ self.image_dir_path + j +" Match Number:"+ str(akaze_match_num))
+                    if akaze_match_num > 0:
+                        daplication_pair.append([self.image_dir_path + i, self.image_dir_path + j])
+
+        return daplication_pair
+                    
+

@@ -5,6 +5,8 @@ from getpass import getpass
 import sys
 import os.path
 
+import check_daplication as CD
+
 #以下は接続するicloudのアカウントとパスワードを記載します。
 iCloudAccount = getpass('Enter your icloud Account: ')
 iCloudPassword = getpass('Enter your icloud Password: ')
@@ -62,6 +64,7 @@ if __name__ == '__main__':
     """
 
     # 写真の glasses 取得
+    # オリジナルのメガネ画像保存先パス
     glasses_original_dir_pass = '/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'
     glasses_original_dir_filenum = listdir_nohidden(glasses_original_dir_pass)
     # glasses_original_dir_filenum = len(glasses_original_dir_files)
@@ -87,5 +90,11 @@ if __name__ == '__main__':
 
     # 画像の重複チェック
     print('Run Daplication check?(y/n)')
+    daplication_select = input('y/n? >> ')
 
+    if daplication_select == 'y':
+        # インスタンスに画像が保存されているパスを与える
+        ins_check_daplication = CD.check_daplication(glasses_original_dir_pass)
+    else :
+        pass
     

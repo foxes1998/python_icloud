@@ -82,9 +82,15 @@ if __name__ == '__main__':
                 root, ext = os.path.splitext(photo.filename)
                 with open('/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'+ str(photo_number) + str(ext), 'wb') as opened_file:
                     opened_file.write(download.raw.read())
+                dap_pair = ins_check_daplication.check_daplication_for_single_file('/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'+ str(photo_number+1) + str(ext))
                 photo_number = photo_number-1
+                # インスタンスに画像が保存されているパスを与える
+                ins_check_daplication = CD.check_daplication(glasses_original_dir_pass)
                 if photo_number == glasses_original_dir_filenum:
                     break
+                elif dap_pair != []:
+                    print('There is daplication file(s)')
+                    print(dap_pair)
     else:
         print('no update')
 
@@ -93,8 +99,6 @@ if __name__ == '__main__':
     daplication_select = input('y/n? >> ')
 
     if daplication_select == 'y':
-        # インスタンスに画像が保存されているパスを与える
-        ins_check_daplication = CD.check_daplication(glasses_original_dir_pass)
         daplication_pair = ins_check_daplication.find_daplication_with_Brute_force_search()
     else :
         pass

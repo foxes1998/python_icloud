@@ -70,4 +70,13 @@ class check_daplication:
 
         return daplication_pair
                     
-
+    def check_daplication_for_single_file(self, single_file_path):
+        daplication_file = []
+        all_file_list = natsorted(check_daplication.get_file_list(self))
+        for i in all_file_list:
+            akaze_match_num = check_daplication.get_akaze_feature_value(self, single_file_path, self.image_dir_path + i)
+            print(single_file_path+ ", "+ self.image_dir_path + 1 +" Match Number:"+ str(akaze_match_num))
+            if akaze_match_num > 0:
+                daplication_file.append([single_file_path, self.image_dir_path+i])
+        
+        return daplication_file

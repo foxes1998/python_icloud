@@ -69,6 +69,8 @@ if __name__ == '__main__':
     glasses_original_dir_filenum = listdir_nohidden(glasses_original_dir_pass)
     # インスタンスに画像が保存されているパスを与える
     ins_check_daplication = CD.check_daplication(glasses_original_dir_pass)
+    # 重複チェックリスト
+    all_daplication_pair = []
     # glasses_original_dir_filenum = len(glasses_original_dir_files)
     print('glasses_original_dir_filenum:'+ str(glasses_original_dir_filenum))
     icloud_glasses_photo_number = len(api.photos.albums['glasses'])
@@ -89,8 +91,14 @@ if __name__ == '__main__':
                 if dap_pair != []:
                     print('There is daplication file(s)')
                     print(dap_pair)
+                    all_daplication_pair.append(dap_pair)
                 if photo_number == glasses_original_dir_filenum:
                     break
+            if all_daplication_pair != []:
+                print('There is daplication file(s)')
+                print(all_daplication_pair)
+            else:
+                print('no daplication')
                 
     else:
         print('no update')

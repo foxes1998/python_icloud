@@ -3,6 +3,7 @@ import re
 import numpy as np
 import cv2 as cv
 
+from tqdm import tqdm
 from natsort import natsorted
 from multiprocessing import Pool
 
@@ -74,10 +75,11 @@ class check_daplication:
         daplication_file = []
         self.single_file_path = single_file_path
         all_file_list = natsorted(check_daplication.get_file_list(self))
-        for i in all_file_list:
-            akaze_match_num = check_daplication.get_akaze_feature_value(self, self.single_file_path, self.image_dir_path + i)
-            print(single_file_path+ ", "+ self.image_dir_path + i +" Match Number:"+ str(akaze_match_num))
-            if akaze_match_num > 0:
-                daplication_file.append([single_file_path, self.image_dir_path+i])
+        for i in tqdm(all_file_list):
+            if (self.single_file_path != self.image_dir_path+i) :
+                akaze_match_num = check_daplication.get_akaze_feature_value(self, self.single_file_path, self.image_dir_path + i)
+            # print(single_file_path+ ", "+ self.image_dir_path + i +" Match Number:"+ str(akaze_match_num))
+                if akaze_match_num > 0:
+                    daplication_file.append([single_file_path, self.image_dir_path+i])
         
         return daplication_file

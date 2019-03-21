@@ -29,8 +29,14 @@ class check_daplication:
     def get_akaze_feature_value(self, image_file_path_1, image_file_path_2):
         self.image_file_path_1 = image_file_path_1
         self.image_file_path_2 = image_file_path_2
-        img1 = cv.imread(self.image_file_path_1,0)
-        img2 = cv.imread(self.image_file_path_2,0)
+        try:
+            img1 = cv.imread(self.image_file_path_1,0)
+        except:
+            print ('faild to loade'+ self.image_file_path_1)
+        try:
+            img2 = cv.imread(self.image_file_path_2,0)
+        except:
+            print ('faild to loade'+ self.image_file_path_2)
         #速度向上のためのリサイズ
         resize_width = 300
         img_height_1, img_width_1 = img1.shape[:2]

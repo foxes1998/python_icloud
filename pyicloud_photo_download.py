@@ -74,14 +74,14 @@ if __name__ == '__main__':
     all_daplication_pair = []
     # glasses_original_dir_filenum = len(glasses_original_dir_files)
     print('glasses_original_dir_filenum:'+ str(glasses_original_dir_filenum))
-    icloud_glasses_photo_number = len(api.photos.albums['test_album'])
+    icloud_glasses_photo_number = len(api.photos.albums['glasses'])
     print('icloud_glasses_photo_number:'+ str(icloud_glasses_photo_number))
     photo_number = icloud_glasses_photo_number
     if glasses_original_dir_filenum != icloud_glasses_photo_number:
         if glasses_original_dir_filenum > icloud_glasses_photo_number:
             print ('There may be errors in '+glasses_original_dir_pass)
         else :
-            for photo in api.photos.albums['test_album']:
+            for photo in api.photos.albums['glasses']:
                 print (photo, photo.filename)
                 download = photo.download()
                 #print ('dounloaded...')

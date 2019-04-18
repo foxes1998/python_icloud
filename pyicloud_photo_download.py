@@ -3,6 +3,7 @@
 from pyicloud import PyiCloudService
 from getpass import getpass
 import sys
+import glob
 import os.path
 
 import check_daplication as CD
@@ -73,32 +74,40 @@ if __name__ == '__main__':
     all_daplication_pair = []
     # glasses_original_dir_filenum = len(glasses_original_dir_files)
     print('glasses_original_dir_filenum:'+ str(glasses_original_dir_filenum))
-    icloud_glasses_photo_number = len(api.photos.albums['glasses'])
+    icloud_glasses_photo_number = len(api.photos.albums['test_album'])
     print('icloud_glasses_photo_number:'+ str(icloud_glasses_photo_number))
     photo_number = icloud_glasses_photo_number
     if glasses_original_dir_filenum != icloud_glasses_photo_number:
         if glasses_original_dir_filenum > icloud_glasses_photo_number:
             print ('There may be errors in '+glasses_original_dir_pass)
         else :
-            for photo in api.photos.albums['glasses']:
+            for photo in api.photos.albums['test_album']:
                 print (photo, photo.filename)
                 download = photo.download()
+                #print ('dounloaded...')
                 root, ext = os.path.splitext(photo.filename)
                 with open('/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'+ str(photo_number) + str(ext), 'wb') as opened_file:
                     opened_file.write(download.raw.read())
-                dap_pair = ins_check_daplication.check_daplication_for_single_file('/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'+ str(photo_number) + str(ext))
-                photo_number = photo_number-1
+                photo_number = photo_number - 1
+                if photo_number == glasses_original_dir_filenum:
+                    break
+
+            for index_num in range(icloud_glasses_photo_number, glasses_original_dir_filenum, -1):
+                #print ('daplication loop')
+                l_index_file_name = glob.glob('/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'+str(index_num)+'.*')
+                s_index_file_name = str(l_index_file_name[0])
+                #print (s_index_file_name)
+                dap_pair = ins_check_daplication.check_daplication_for_single_file(s_index_file_name)
                 if dap_pair != []:
                     print('There is daplication file(s)')
                     print(dap_pair)
                     all_daplication_pair.append(dap_pair)
-                if photo_number == glasses_original_dir_filenum:
-                    break
-            if all_daplication_pair != []:
-                print('There is daplication file(s)')
-                print(all_daplication_pair)
-            else:
-                print('no daplication')
+
+        if all_daplication_pair != []:
+            print('There is daplication file(s)')
+            print(all_daplication_pair)
+        else:
+            print('no daplication')
                 
     else:
         print('no update')

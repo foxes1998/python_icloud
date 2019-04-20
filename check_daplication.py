@@ -2,6 +2,8 @@ import os
 import re
 import numpy as np
 import cv2 as cv
+import time
+import random
 
 from tqdm import tqdm
 from natsort import natsorted
@@ -31,10 +33,12 @@ class check_daplication:
         self.image_file_path_2 = image_file_path_2
         try:
             img1 = cv.imread(self.image_file_path_1,0)
+            #cv.imwrite('1.jpg', img1)
         except:
             print ('faild to loade'+ self.image_file_path_1)
         try:
             img2 = cv.imread(self.image_file_path_2,0)
+            #cv.imwrite(str(random.random())+'2.jpg', img2)
         except:
             print ('faild to loade'+ self.image_file_path_2)
         #速度向上のためのリサイズ
@@ -66,12 +70,13 @@ class check_daplication:
         daplication_pair = []
         all_file_list = natsorted(check_daplication.get_file_list(self))
         for i in all_file_list:
-            for j in all_file_list:
+            print('for '+ i +' File')
+            for j in tqdm(all_file_list):
                 if i == j or all_file_list.index(i) > all_file_list.index(j):
                     pass
                 else:
                     akaze_match_num = check_daplication.get_akaze_feature_value(self, self.image_dir_path + i, self.image_dir_path + j)
-                    print(self.image_dir_path + i +", "+ self.image_dir_path + j +" Match Number:"+ str(akaze_match_num))
+                    #print(self.image_dir_path + i +", "+ self.image_dir_path + j +" Match Number:"+ str(akaze_match_num))
                     if akaze_match_num > 0:
                         daplication_pair.append([self.image_dir_path + i, self.image_dir_path + j])
 

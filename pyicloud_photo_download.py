@@ -84,10 +84,11 @@ if __name__ == '__main__':
             for photo in api.photos.albums['glasses']:
                 print (photo, photo.filename)
                 download = photo.download()
-                #print ('dounloaded...')
+                print ('dounloaded...')
                 root, ext = os.path.splitext(photo.filename)
                 with open('/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'+ str(photo_number) + str(ext), 'wb') as opened_file:
                     opened_file.write(download.raw.read())
+                print ('written...')
                 photo_number = photo_number - 1
                 if photo_number == glasses_original_dir_filenum:
                     break
@@ -118,6 +119,11 @@ if __name__ == '__main__':
 
     if daplication_select == 'y':
         daplication_pair = ins_check_daplication.find_daplication_with_Brute_force_search()
+        if daplication_pair == []:
+            print ('no daplication')
+        else :
+            print('There is daplication file(s)')
+            print(daplication_pair)
     else :
         pass
     

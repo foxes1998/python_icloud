@@ -59,7 +59,7 @@ class check_daplication:
         matches = bf.knnMatch(des1,des2, k=2)
         #割合試験を適用
         good = []
-        match_param = 0.2
+        match_param = 0.1
         for m,n in matches:
             if m.distance < match_param*n.distance:
                 good.append([m])
@@ -78,7 +78,7 @@ class check_daplication:
                     akaze_match_num = check_daplication.get_akaze_feature_value(self, self.image_dir_path + i, self.image_dir_path + j)
                     #print(self.image_dir_path + i +", "+ self.image_dir_path + j +" Match Number:"+ str(akaze_match_num))
                     if akaze_match_num > 0:
-                        daplication_pair.append([self.image_dir_path + i, self.image_dir_path + j])
+                        daplication_pair.append([self.image_dir_path + i, self.image_dir_path + j, akaze_match_num])
 
         return daplication_pair
                     
@@ -91,6 +91,6 @@ class check_daplication:
                 akaze_match_num = check_daplication.get_akaze_feature_value(self, self.single_file_path, self.image_dir_path + i)
             # print(single_file_path+ ", "+ self.image_dir_path + i +" Match Number:"+ str(akaze_match_num))
                 if akaze_match_num > 0:
-                    daplication_file.append([single_file_path, self.image_dir_path+i])
+                    daplication_file.append([single_file_path, self.image_dir_path+i, akaze_match_num])
         
         return daplication_file

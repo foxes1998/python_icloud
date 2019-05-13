@@ -45,8 +45,8 @@ class check_daplication:
         resize_width = 300
         img_height_1, img_width_1 = img1.shape[:2]
         img_height_2, img_width_2 = img2.shape[:2]
-        resize_height1 = resize_width / img_width_1 * img_height_1
-        resize_height2 = resize_width / img_width_2 * img_height_2
+        resize_height1 = (resize_width / img_width_1) * img_height_1
+        resize_height2 = (resize_width / img_width_2) * img_height_2
         img1 = cv.resize(img1,(int(resize_width),int(resize_height1)))
         img2 = cv.resize(img2,(int(resize_width),int(resize_height2)))
         #特徴抽出機の生成

@@ -2,6 +2,7 @@
 #-*- coding:utf-8 -*-
 from pyicloud import PyiCloudService
 from getpass import getpass
+from os import listdir
 import sys
 import glob
 import os.path
@@ -14,7 +15,7 @@ iCloudPassword = getpass('Enter your icloud Password: ')
 api = PyiCloudService(iCloudAccount, iCloudPassword)
 
 #ここから2段認証を実施する。
-if api.requires_2sa:
+if api.requires_2fa:
     import click
     print ("Two-factor authentication required. Your trusted devices are: ")
 
@@ -67,7 +68,8 @@ if __name__ == '__main__':
     # 写真の glasses 取得
     # オリジナルのメガネ画像保存先パス
     glasses_original_dir_pass = '/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'
-    glasses_original_dir_filenum = listdir_nohidden(glasses_original_dir_pass)
+    glasses_original_dir_filelist = [filename for filename in listdir(glasses_original_dir_pass) if not filename.startswith('.')]
+    glasses_original_dir_filenum = len(glasses_original_dir_filelist)
     # インスタンスに画像が保存されているパスを与える
     ins_check_daplication = CD.check_daplication(glasses_original_dir_pass)
     # 重複チェックリスト

@@ -15,7 +15,7 @@ iCloudPassword = getpass('Enter your icloud Password: ')
 api = PyiCloudService(iCloudAccount, iCloudPassword)
 
 #ここから2段認証を実施する。
-if api.requires_2fa:
+if api.requires_2sa:
     import click
     print ("Two-factor authentication required. Your trusted devices are: ")
 

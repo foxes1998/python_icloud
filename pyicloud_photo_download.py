@@ -68,6 +68,8 @@ if __name__ == '__main__':
     # 写真の glasses 取得
     # オリジナルのメガネ画像保存先パス
     glasses_original_dir_pass = '/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'
+    #未評価ファイルフォルダ
+    unrated_dir_path = '/Users/shimadatakuyume/ImageData/Unrated/'
     glasses_original_dir_filelist = [filename for filename in listdir(glasses_original_dir_pass) if not filename.startswith('.')]
     glasses_original_dir_filenum = len(glasses_original_dir_filelist)
     # インスタンスに画像が保存されているパスを与える
@@ -89,6 +91,9 @@ if __name__ == '__main__':
                 print ('dounloaded...')
                 root, ext = os.path.splitext(photo.filename)
                 with open('/Users/shimadatakuyume/iCloud_pi/icloud_photos/glasses/glasses_original/'+ str(photo_number) + str(ext), 'wb') as opened_file:
+                    opened_file.write(download.raw.read())
+                # 未評価フォルダにも保存
+                with open('/Users/shimadatakuyume/ImageData/Unrated/'+ str(photo_number) + str(ext), 'wb') as opened_file:
                     opened_file.write(download.raw.read())
                 print ('written...')
                 photo_number = photo_number - 1
